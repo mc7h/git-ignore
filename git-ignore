@@ -33,6 +33,6 @@ else
     git clone "${REPO}" "${CACHE_DIR}"
 fi
 
-find /tmp/gitignore -type f -name '*.gitignore' |
+find ${CACHE_DIR} -type f -name '*.gitignore' |
     fzf --query="${FILTER}" --with-nth -1 --delimiter / --preview 'echo {}' --select-1 --exit-0 |
     xargs -r -I {} cp {} .gitignore
