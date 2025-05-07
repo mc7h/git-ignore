@@ -6,6 +6,7 @@ Shell Script and Git alias to select and install a remote `.gitignore` template.
 
 ```shell
 curl -O -L -P /path/to/dir https://raw.githubusercontent.com/mc7h/git-ignore/main/git-ignore
+chmod +x /path/to/dir/git-ignore
 ```
 
 > [!NOTE]
