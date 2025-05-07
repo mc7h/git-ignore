@@ -1,0 +1,38 @@
+#!/bin/bash
+# -----------------------------------------------------------------------------
+# Script Name : git-ignore
+# Description : Select and copy a remote .gitignore template from GitHub.
+# Author      : Marc <hello@mc7h.me>
+# Date        : 2025-05-07
+# Version     : 1.0
+# License     : MIT
+# Dependencies: fzf, git, find
+# Usage       : git ignore [query]
+#               git will auto-detect ignore as a subcommand if it's in the PATH
+# -----------------------------------------------------------------------------
+
+REPO=https://github.com/github/gitignore.git
+CACHE_DIR="/tmp/gitignore"
+
+FILTER=$1
+
+for cmd in fzf git find; do
+    if ! command -v "${cmd}" >/dev/null; then
+        echo "Error: Required command '${cmd}' is not installed or not in PATH."
+        exit 1
+    fi
+done
+
+if [ -d ${CACHE_DIR}/.git ]; then
+    if [ -n "${FORCE_GI_PULL}" ]; then
+        echo "Updating existing repository..."
+        git -C "${CACHE_DIR}" pull --ff-only
+    fi
+else
+    echo "Fetching gitignore templates from GitHub..."
+    git clone "${REPO}" "${CACHE_DIR}"
+fi
+
+find /tmp/gitignore -type f -name '*.gitignore' |
+    fzf --query="${FILTER}" --with-nth -1 --delimiter / --preview 'echo {}' --select-1 --exit-0 |
+    xargs -r -I {} cp {} .gitignore
