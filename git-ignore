@@ -1,7 +1,7 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 # Script Name : git-ignore
-# Description : Select and copy a remote .gitignore template from GitHub.
+# Description : Select and copy a remote .gitignore template from GitHub
 # Author      : Marc <hello@mc7h.me>
 # Date        : 2025-05-07
 # Version     : 1.0
@@ -11,8 +11,8 @@
 #               git will auto-detect ignore as a subcommand if it's in the PATH
 # -----------------------------------------------------------------------------
 
-REPO=https://github.com/github/gitignore.git
-CACHE_DIR="/tmp/gitignore"
+REPO="${REPO:-https://github.com/github/gitignore.git}"
+CACHE_DIR="${CACHE_DIR:-/tmp/gitignore}"
 
 FILTER=$1
 
