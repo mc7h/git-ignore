@@ -4,17 +4,18 @@
 # Description : Select and copy a remote .gitignore template from GitHub
 # Author      : Marc <hello@mc7h.me>
 # Date        : 2025-05-07
-# Version     : 1.0
+# Version     : 1.0.1
 # License     : MIT
 # Dependencies: fzf, git, find
 # Usage       : git ignore [query]
 #               git will auto-detect ignore as a subcommand if it's in the PATH
 # -----------------------------------------------------------------------------
 
-REPO="${REPO:-https://github.com/github/gitignore.git}"
 CACHE_DIR="${CACHE_DIR:-/tmp/gitignore}"
+REPO="${REPO:-https://github.com/github/gitignore.git}"
 
-FILTER=$1
+FORCE_GI_PULL="${FORCE_GI_PULL:-}"
+FILTER="${1:-}"
 
 for cmd in fzf git find; do
     if ! command -v "${cmd}" >/dev/null; then
@@ -23,7 +24,7 @@ for cmd in fzf git find; do
     fi
 done
 
-if [ -d ${CACHE_DIR}/.git ]; then
+if [ -d "${CACHE_DIR}"/.git ]; then
     if [ -n "${FORCE_GI_PULL}" ]; then
         echo "Updating existing repository..."
         git -C "${CACHE_DIR}" pull --ff-only
@@ -33,6 +34,6 @@ else
     git clone "${REPO}" "${CACHE_DIR}"
 fi
 
-find ${CACHE_DIR} -type f -name '*.gitignore' |
+find "${CACHE_DIR}" -type f -name '*.gitignore' |
     fzf --query="${FILTER}" --with-nth -1 --delimiter / --preview 'echo {}' --select-1 --exit-0 |
     xargs -r -I {} cp {} .gitignore
